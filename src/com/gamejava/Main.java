@@ -1,13 +1,18 @@
 package com.gamejava;
 
 import com.gamejava.adapter.Game;
+import com.gamejava.database.ConnectDB;
 
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        Game game = new Game();
+        ConnectDB myDB = new ConnectDB();
+//        int questionId = myDB.addQuestion("que quan", "1");
+//        myDB.addAnswer("nam dinh", questionId);
+        myDB.getAll();
+        Game game = new Game(myDB.getQuestionList());
         String choice = "Y";
         while (choice.equals("Y")) {
             game.run();

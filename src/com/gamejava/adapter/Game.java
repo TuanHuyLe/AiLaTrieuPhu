@@ -19,6 +19,11 @@ public class Game {
         this.questions = questionAdapter.getQuestionList();
     }
 
+    public Game(List<Question> questionList) {
+        this.scanner = new Scanner(System.in);
+        this.questions = questionList;
+    }
+
     public void run() {
         int i = 0;
         this.score = 0;
@@ -39,7 +44,7 @@ public class Game {
                 break;
             }
         } while (this.questions.size() != i);
-        if (i == this.questions.size()){
+        if (i == this.questions.size()) {
             System.out.println("Chuc mung ban da thang het cau hoi");
         }
     }
