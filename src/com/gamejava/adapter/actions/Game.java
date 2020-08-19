@@ -1,9 +1,20 @@
 package com.gamejava.adapter.actions;
 
+import com.gamejava.dao.impl.AnswerDAO;
+import com.gamejava.dao.impl.QuestionDAO;
+import com.gamejava.model.Answer;
+import com.gamejava.model.Question;
+import com.gamejava.services.impl.AnswerService;
+import com.gamejava.services.impl.QuestionService;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
     private Account account;
+    private Action action;
+    private Integer score;
 
     public Game() {
         account = new Account();
@@ -73,8 +84,36 @@ public class Game {
         } while (i < 100);
     }
 
-    private void showPlay(){
-
+    private void showPlay(Scanner scanner) {
+        action = new Action(new QuestionService(new QuestionDAO()), new AnswerService(new AnswerDAO()));
+        score = 0;
+        Map<Question, List<Answer>> questionAnswerMap = action.getQuestionAnswerMap();
+        int j = 1;
+        for (Map.Entry<Question, List<Answer>> entry : questionAnswerMap.entrySet()) {
+            Question question = entry.getKey();
+            List<Answer> answers = entry.getValue();
+            System.out.println("\nCâu hỏi " + j + ": " + question.getQuestion());
+            String correctAnswer = "";
+            for (int i = 1; i <= answers.size(); i++) {
+                System.out.println(i + ". " + answers.get(i - 1).getAnswer());
+                if (Integer.parseInt(question.getCorrectAnswer()) == i) {
+                    correctAnswer = answers.get(i - 1).getAnswer();
+                }
+            }
+            System.out.println("Đáp án của bạn là gì?");
+            String answer = scanner.nextLine();
+            if (answer.equals(question.getCorrectAnswer())) {
+                score += 1;
+                System.out.println("Bạn đã trả lời đúng. Số điểm hiện tại: " + score);
+            } else {
+                System.out.println("Bạn đã trả lời sai. Đáp án là: " + correctAnswer);
+                break;
+            }
+            j += 1;
+        }
+        if (score == 10){
+            System.out.println("Chúc mừng bạn đã trả lời đúng hết các câu hỏi!");
+        }
     }
 
     public void run() {
@@ -92,7 +131,7 @@ public class Game {
                     clearScreen();
                     if (check) {
                         System.out.println("Đăng nhập thành công!");
-                        showPlay();
+                        showPlay(scanner);
                     }
                     choice = 1;
                     break;
