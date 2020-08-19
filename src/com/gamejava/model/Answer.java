@@ -1,28 +1,40 @@
 package com.gamejava.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Answer {
-    private List<String> answer;
+    private Integer Id;
+    private String answer;
+    private Integer questionId;
 
     public Answer() {
-        this.answer = new ArrayList<>();
     }
 
-    public Answer(List<String> answer) {
+    public Answer(Integer id, String answer, Integer questionId) {
+        Id = id;
         this.answer = answer;
+        this.questionId = questionId;
     }
 
-    public void addAnswer(String answer) {
-        this.answer.add(answer);
+    public Integer getId() {
+        return Id;
     }
 
-    public List<String> getAnswer() {
+    public void setId(Integer id) {
+        Id = id;
+    }
+
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(List<String> answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
     }
 }

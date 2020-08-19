@@ -1,26 +1,25 @@
 package com.gamejava.model;
 
 public class Question {
+    private Integer id;
     private String question;
-    private Answer answer;
     private String correctAnswer;
 
     public Question() {
-        this.answer = new Answer();
     }
 
-    public Question(String question, Answer answer, String correctAnswer) {
+    public Question(Integer id, String question, String correctAnswer) {
+        this.id = id;
         this.question = question;
-        this.answer = answer;
         this.correctAnswer = correctAnswer;
     }
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getQuestion() {
@@ -31,11 +30,11 @@ public class Question {
         this.question = question;
     }
 
-    public Answer getAnswer() {
-        return answer;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public void setAnswer(Answer answer) {
-        this.answer = answer;
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 }

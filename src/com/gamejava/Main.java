@@ -1,23 +1,19 @@
 package com.gamejava;
 
-import com.gamejava.adapter.Game;
-import com.gamejava.database.ConnectDB;
+import com.gamejava.dao.impl.QuestionDAO;
+import com.gamejava.model.Question;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        ConnectDB myDB = new ConnectDB();
-//        int questionId = myDB.addQuestion("que quan", "1");
-//        myDB.addAnswer("nam dinh", questionId);
-        myDB.getAll();
-        Game game = new Game(myDB.getQuestionList());
-        String choice = "Y";
-        while (choice.equals("Y")) {
-            game.run();
-            System.out.println("Ban muon choi lai (Y/N): ");
-            choice = new Scanner(System.in).nextLine();
-        }
+        QuestionDAO questionDAO = new QuestionDAO();
+//        List<Question> questionList = questionDAO.findAll();
+//        for (Question question : questionList) {
+//            System.out.println(question.getId() + ", " + question.getQuestion() + ", " + question.getCorrectAnswer());
+//        }
+        Question question = questionDAO.findOne(1);
+        System.out.println(question.getId() + ", " + question.getQuestion() + ", " + question.getCorrectAnswer());
     }
 }
