@@ -30,3 +30,5 @@ create table score
     foreign key (user_id)
     references user(id)
 );
+
+alter table user add password nvarchar(150) not null;

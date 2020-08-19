@@ -12,6 +12,7 @@ public class UserMapper implements IRowMapper<User> {
         try {
             user.setId(resultSet.getInt("id"));
             user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
             return user;
         } catch (SQLException e) {
             e.printStackTrace();

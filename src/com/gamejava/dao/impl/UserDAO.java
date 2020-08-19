@@ -22,19 +22,26 @@ public class UserDAO extends AbstractDAO<User> implements IUserDAO {
 
     @Override
     public Integer save(User user) {
-        String sql = "insert into user(name) values(?)";
-        return insert(sql, user.getName());
+        String sql = "insert into user(name, password) values(?,?)";
+        return insert(sql, user.getName(), user.getPassword());
     }
 
     @Override
     public void update(User user) {
-        String sql = "update user set name = ? where id = ?";
-        update(sql, user.getName(), user.getId());
+        String sql = "update user set name = ?, password = ? where id = ?";
+        update(sql, user.getName(), user.getPassword(), user.getId());
     }
 
     @Override
     public void delete(int id) {
         String sql = "delete from user where id = ?";
         update(sql, id);
+    }
+
+    @Override
+    public User findByName(String name) {
+        String sql = "select * from user where name = ?";
+        List<User> list = query(sql, new UserMapper(), name);
+        return list.isEmpty() ? null : list.get(0);
     }
 }

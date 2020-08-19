@@ -14,4 +14,6 @@ public interface IUserDAO extends IGenericDAO<User> {
     void update(User user);
 
     void delete(int id);
+
+    User findByName(String name);
 }
