@@ -1,9 +1,15 @@
 package com.gamejava.adapter.actions;
 
+import com.gamejava.dao.impl.AnswerDAO;
+import com.gamejava.dao.impl.QuestionDAO;
+import com.gamejava.dao.impl.ScoreDAO;
+import com.gamejava.dao.impl.UserDAO;
 import com.gamejava.model.Answer;
 import com.gamejava.model.Question;
 import com.gamejava.services.impl.AnswerService;
 import com.gamejava.services.impl.QuestionService;
+import com.gamejava.services.impl.ScoreService;
+import com.gamejava.services.impl.UserService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,14 +19,18 @@ import java.util.Map;
 public class Action {
     private QuestionService questionService;
     private AnswerService answerService;
+    private ScoreService scoreService;
+    private UserService userService;
 
     private Map<Question, List<Answer>> questionAnswerMap;
     private List<Answer> answerList;
     private List<Question> questionList;
 
-    public Action(QuestionService questionService, AnswerService answerService) {
-        this.questionService = questionService;
-        this.answerService = answerService;
+    public Action() {
+        this.questionService = new QuestionService(new QuestionDAO());
+        this.answerService = new AnswerService(new AnswerDAO());
+        this.scoreService = new ScoreService(new ScoreDAO());
+        this.userService = new UserService(new UserDAO());
         initQuestions();
     }
 
@@ -37,6 +47,22 @@ public class Action {
             }
             questionAnswerMap.put(question, answers);
         }
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public ScoreService getScoreService() {
+        return scoreService;
+    }
+
+    public void setScoreService(ScoreService scoreService) {
+        this.scoreService = scoreService;
     }
 
     public Map<Question, List<Answer>> getQuestionAnswerMap() {

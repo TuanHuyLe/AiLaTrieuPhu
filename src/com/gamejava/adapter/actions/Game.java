@@ -1,11 +1,9 @@
 package com.gamejava.adapter.actions;
 
-import com.gamejava.dao.impl.AnswerDAO;
-import com.gamejava.dao.impl.QuestionDAO;
 import com.gamejava.model.Answer;
 import com.gamejava.model.Question;
-import com.gamejava.services.impl.AnswerService;
-import com.gamejava.services.impl.QuestionService;
+import com.gamejava.model.Score;
+import com.gamejava.model.User;
 
 import java.util.List;
 import java.util.Map;
@@ -15,16 +13,25 @@ public class Game {
     private Account account;
     private Action action;
     private Integer score;
+    private User user = null;
 
     public Game() {
         account = new Account();
+        action = new Action();
     }
 
     private void showHome() {
         System.out.println("==================== AI LÀ TRIỆU PHÚ ====================");
+        if (user != null) {
+            System.out.println("                 ==> Xin chào " + user.getName() + " <==");
+        } else {
+            System.out.println("==================> Bạn chưa đăng nhập <=================");
+        }
         System.out.println("1. Đăng nhập");
         System.out.println("2. Đăng ký");
-        System.out.println("3. Thoát");
+        System.out.println("3. Chơi");
+        System.out.println("4. Điểm cao");
+        System.out.println("5. Thoát");
         System.out.println("Mời bạn lựa chọn:");
     }
 
@@ -40,7 +47,12 @@ public class Game {
             System.out.println("- Thoát (Any key)");
             String choice = scanner.nextLine();
             if (choice.equals("Y")) {
-                if (account.checkLogin(name, password)) {
+                Integer userId = account.checkLogin(name, password);
+                if (userId != 0) {
+                    user = new User();
+                    user.setId(userId);
+                    user.setName(name);
+                    user.setPassword(password);
                     return true;
                 } else {
                     System.out.println("Tài khoản, mật khẩu không chính xác");
@@ -85,7 +97,6 @@ public class Game {
     }
 
     private void showPlay(Scanner scanner) {
-        action = new Action(new QuestionService(new QuestionDAO()), new AnswerService(new AnswerDAO()));
         score = 0;
         Map<Question, List<Answer>> questionAnswerMap = action.getQuestionAnswerMap();
         int j = 1;
@@ -102,6 +113,7 @@ public class Game {
             }
             System.out.println("Đáp án của bạn là gì?");
             String answer = scanner.nextLine();
+            clearScreen();
             if (answer.equals(question.getCorrectAnswer())) {
                 score += 1;
                 System.out.println("Bạn đã trả lời đúng. Số điểm hiện tại: " + score);
@@ -111,15 +123,19 @@ public class Game {
             }
             j += 1;
         }
-        if (score == 10){
+        if (score == 10) {
             System.out.println("Chúc mừng bạn đã trả lời đúng hết các câu hỏi!");
         }
+        Score score = new Score();
+        score.setScore(this.score);
+        score.setUserId(user.getId());
+        action.getScoreService().save(score);
     }
 
     public void run() {
         int choice = 0;
         clearScreen();
-        while (choice != 3) {
+        while (choice != 5) {
             showHome();
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextInt();
@@ -131,7 +147,6 @@ public class Game {
                     clearScreen();
                     if (check) {
                         System.out.println("Đăng nhập thành công!");
-                        showPlay(scanner);
                     }
                     choice = 1;
                     break;
@@ -143,8 +158,35 @@ public class Game {
                     }
                     choice = 2;
                     break;
+                case 3:
+                    clearScreen();
+                    if (user == null) {
+                        System.out.println("Bạn chưa đăng nhập");
+                    } else {
+                        showPlay(scanner);
+                    }
+                    break;
+                case 4:
+                    clearScreen();
+                    showHighScore();
+                    break;
                 default:
-                    choice = 3;
+                    choice = 5;
+            }
+        }
+    }
+
+    private void showHighScore() {
+        List<Score> scoreList = action.getScoreService().findAll();
+        if (user == null) {
+            System.out.println("Bạn chưa đăng nhập");
+        } else {
+            int j = 1;
+            System.out.println("Điểm cao:");
+            for (Score score : scoreList) {
+                if (score.getUserId() == user.getId()) {
+                    System.out.println(j + ". " + score.getScore());
+                }
             }
         }
     }

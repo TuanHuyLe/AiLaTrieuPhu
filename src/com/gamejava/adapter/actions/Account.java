@@ -14,14 +14,14 @@ public class Account {
         userService = new UserService(new UserDAO());
     }
 
-    public boolean checkLogin(String name, String password) {
+    public Integer checkLogin(String name, String password) {
         List<User> list = userService.findAll();
         for (User user : list) {
             if (user.getName().equals(name) && user.getPassword().equals(password)) {
-                return true;
+                return user.getId();
             }
         }
-        return false;
+        return 0;
     }
 
     public boolean registerAccount(String name, String password) {
